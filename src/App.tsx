@@ -1,59 +1,90 @@
+import { useState, useEffect } from "react"
+
 export default function App() {
+  // 1. By default, start with 'calm' mode as requested.
+  const [theme, setTheme] = useState<"calm" | "energy">("calm")
+
+  // 2. React to theme changes by updating the data-theme attribute on the root HTML element.
+  // This triggers all the CSS variables we defined in index.css to swap instantly!
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme)
+  }, [theme])
+
+  // 3. dynamically select the image based on the active theme
+  const heroImage =
+    theme === "energy"
+      ? "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" // Tech/Neon Vibe
+      : "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop" // Forest/Nature Vibe
+
   return (
-    <div className="min-h-screen bg-background text-text flex flex-col items-center justify-center p-8 font-body">
-      <div className="max-w-4xl w-full bg-primary rounded-2xl shadow-2xl overflow-hidden p-8 border border-secondary/30">
-        <header className="mb-10 text-center">
-          <h1 className="text-5xl md:text-6xl font-heading font-bold text-accent mb-4 tracking-tight">
-            Developer Portfolio
-          </h1>
-          <p className="text-xl md:text-2xl text-text/80 font-light flex items-center justify-center gap-2">
-            Using the explicit <span className="text-accent font-semibold">Design System</span>
+    // 'bg-surface' and 'text-on-surface' will automatically change based on the active CSS variables
+    <div className="min-h-screen bg-surface text-on-surface transition-colors duration-500 overflow-hidden">
+      {/* Navigation */}
+      <nav className="p-6 md:p-8 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <h1 className="font-heading text-2xl font-bold tracking-tighter">
+          PORTFOLIO<span className="text-primary">.</span>
+        </h1>
+        <button
+          onClick={() => setTheme(theme === "calm" ? "energy" : "calm")}
+          className="px-6 py-2 rounded-button bg-surface-container-high hover:bg-surface-bright text-primary border border-outline-variant transition-all font-label uppercase text-sm tracking-widest cursor-pointer"
+        >
+          {theme === "calm" ? "Activate Energy" : "Return to Calm"}
+        </button>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-6 py-12 md:py-20 grid md:grid-cols-2 gap-16 md:gap-8 items-center h-full">
+        {/* Text Content Block */}
+        <div className="flex flex-col gap-8 z-10">
+          {/* 'font-display' maps to Epilogue or Space Grotesk depending on the theme */}
+          <h2 className="font-display text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight">
+            {theme === "calm" ? "The Living Curator." : "Digital Adrenaline."}
+          </h2>
+
+          {/* 'font-body' maps to Manrope or Epilogue depending on the theme */}
+          <p className="font-body text-on-surface-variant text-lg md:text-xl max-w-md">
+            {theme === "calm"
+              ? "A fluid, organic space. Embrace intentional asymmetry, tonal depth, and pure serenity."
+              : "Raw speed and high-performance visualization. Command attention in the digital void."}
           </p>
-        </header>
 
-        <section className="bg-secondary/40 rounded-xl p-8 backdrop-blur-sm border border-accent/20">
-          <h2 className="text-3xl font-heading font-semibold text-text mb-6">Color Palette</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {[
-              { name: 'Primary', class: 'bg-primary' },
-              { name: 'Secondary', class: 'bg-secondary' },
-              { name: 'Accent', class: 'bg-accent' },
-              { name: 'Background', class: 'bg-background' },
-              { name: 'Text Color', class: 'bg-text', textClass: 'text-background' },
-            ].map((color) => (
-              <div key={color.name} className="flex flex-col gap-2">
-                <div 
-                  className={`h-24 rounded-lg shadow-md ${color.class} flex items-center justify-center border border-white/10 transition-transform hover:scale-105`}
-                >
-                  <span className={`text-sm font-medium ${color.textClass || 'text-white'}`}>
-                    {color.name}
-                  </span>
-                </div>
-              </div>
-            ))}
+          <div className="mt-4 flex flex-wrap gap-4">
+            <button className="px-8 py-4 rounded-button bg-primary text-on-primary font-bold font-label uppercase border border-transparent transition-all hover:opacity-90">
+              Explore Work
+            </button>
+            <button className="px-8 py-4 rounded-button bg-transparent border border-outline-variant text-primary font-bold font-label uppercase transition-all hover:bg-surface-container-highest">
+              Contact Me
+            </button>
           </div>
-
-          <div className="mt-10">
-            <h2 className="text-3xl font-heading font-semibold text-text mb-4">Typography Settings</h2>
-            <div className="space-y-4">
-              <div className="p-4 bg-background/50 rounded-lg border border-white/5">
-                <p className="font-heading text-lg mb-1 text-accent">Heading Font: Lora</p>
-                <h3 className="font-heading text-4xl">The quick brown fox jumps over the lazy dog</h3>
-              </div>
-              <div className="p-4 bg-background/50 rounded-lg border border-white/5">
-                <p className="font-body text-lg mb-1 text-accent">Body Font: Open Sans</p>
-                <p className="font-body text-xl">The quick brown fox jumps over the lazy dog</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="mt-8 flex justify-center">
-          <button className="px-8 py-4 bg-accent text-background font-bold rounded-lg hover:bg-opacity-90 transition-all font-body text-lg shadow-[0_0_20px_rgba(132,169,140,0.3)] hover:shadow-[0_0_30px_rgba(132,169,140,0.5)]">
-            Get Started
-          </button>
         </div>
-      </div>
+
+        {/* Hero Image Block - Notice how we change border-radius and transforms via CSS variables + classes */}
+        <div
+          className={`
+          relative w-full h-100 md:h-150 overflow-hidden rounded-card 
+          transition-all duration-500 ease-in-out z-10
+          ${theme === "energy" ? "-skew-x-3 shadow-[0_0_40px_rgba(255,81,250,0.15)] ml-4 border-t border-l border-primary/50" : "shadow-2xl"}
+        `}
+        >
+          {/* Colored overlay that pulls from the theme's tint variable */}
+          <div className="absolute inset-0 bg-surface-tint opacity-10 mix-blend-overlay z-10 pointer-events-none"></div>
+
+          <img
+            key={heroImage} // Keys force react to re-mount the img if you want to trigger a fade-in animation, but optional
+            src={heroImage}
+            alt="Hero Representation"
+            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out hover:scale-105"
+          />
+        </div>
+      </main>
+
+      {/* Background Decor (Optional ambient effect depending on theme) */}
+      {theme === "calm" && (
+        <div className="absolute top-0 right-0 w-200 h-200 bg-primary/5 rounded-full blur-[120px] -z-10 translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+      )}
+      {theme === "energy" && (
+        <div className="absolute top-1/2 left-1/2 w-150 h-150 bg-secondary/10 blur-[150px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      )}
     </div>
-  );
+  )
 }
