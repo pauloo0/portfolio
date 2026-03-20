@@ -1,25 +1,165 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #354F52;
-  --color-secondary: #52796F;
-  --color-accent: #84A98C;
-  --color-background: #2F3E46;
-  --color-text: #EEF7E8;
+/* 
+  ===========================================
+  PORTFOLIO DESIGN SYSTEM THEMES
+  ===========================================
+  We define two main themes:
+  - Calm Mode (Default, Natural & Fluid)
+  - Energy Mode (Digital & Aggressive)
+  
+  All theme variables use the prefix `--theme-*` 
+  and we map them to Tailwind tokens using `@theme`.
+*/
 
-  --font-heading: "Lora", serif;
-  --font-body: "Open Sans", sans-serif;
+:root, [data-theme="calm"] {
+  /* COLORS: "The Living Curator" (Default) */
+  --theme-surface: #0b1513;
+  --theme-surface-container-lowest: #07100d;
+  --theme-surface-container-low: #141e1b;
+  --theme-surface-container-high: #222c29;
+  --theme-surface-container-highest: #2a3632;
+  
+  --theme-primary: #66dd8b;
+  --theme-primary-container: #005529;
+  --theme-secondary: #77dc7a;
+  
+  --theme-surface-bright: #313b38;
+  --theme-surface-tint: #66dd8b;
+  
+  --theme-on-surface: #dae5e0;
+  --theme-on-surface-variant: #c1c8c7;
+  --theme-on-primary: #003919;
+  --theme-on-primary-container: #66dd8b;
+  
+  --theme-outline-variant: #414848;
+  --theme-error: #ff5449;
+
+  /* TYPOGRAPHY */
+  --theme-font-display: "Epilogue", sans-serif;
+  --theme-font-heading: "Epilogue", sans-serif;
+  --theme-font-body: "Manrope", sans-serif;
+  --theme-font-label: "Manrope", sans-serif;
+
+  /* BORDERS & RADIUS */
+  --theme-radius-button: 9999px; /* rounded-full */
+  --theme-radius-card: 1.5rem;   /* rounded-xl */
+  --theme-radius-input: 1.5rem;  /* rounded-xl */
+
+  /* SPECIFIC COMPONENT VARIABLES */
+  --theme-hero-gradient: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-container));
 }
 
+[data-theme="energy"] {
+  /* COLORS: "High-Performance Vitality" (Dark/Neon) */
+  --theme-surface: #05100E;
+  --theme-surface-container-lowest: #000000;
+  --theme-surface-container-low: #0A1A17;
+  --theme-surface-container-high: #182926;
+  --theme-surface-container-highest: #1f3330;
+  
+  --theme-primary: #A4FFB9;
+  --theme-primary-container: #00FD87;
+  --theme-secondary: #FF51FA;
+  
+  --theme-surface-bright: #182926;
+  --theme-surface-tint: #A4FFB9;
+  
+  --theme-on-surface: #ffffff;
+  --theme-on-surface-variant: #d0d0d0;
+  --theme-on-primary: #000000;
+  --theme-on-primary-container: #000000;
+  
+  --theme-outline-variant: rgba(255, 255, 255, 0.2);
+  --theme-error: #FF716C;
+
+  /* TYPOGRAPHY */
+  --theme-font-display: "Space Grotesk", sans-serif;
+  --theme-font-heading: "Space Grotesk", sans-serif;
+  --theme-font-body: "Epilogue", sans-serif;
+  --theme-font-label: "Epilogue", sans-serif;
+
+  /* BORDERS & RADIUS */
+  --theme-radius-button: 0px;
+  --theme-radius-card: 0px;
+  --theme-radius-input: 0px;
+
+  /* SPECIFIC COMPONENT VARIABLES */
+  --theme-hero-gradient: none;
+}
+
+/* Map our dynamic CSS variables to Tailwind v4 theme variables */
+@theme {
+  --color-surface: var(--theme-surface);
+  --color-surface-container-lowest: var(--theme-surface-container-lowest);
+  --color-surface-container-low: var(--theme-surface-container-low);
+  --color-surface-container-high: var(--theme-surface-container-high);
+  --color-surface-container-highest: var(--theme-surface-container-highest);
+  --color-primary: var(--theme-primary);
+  --color-primary-container: var(--theme-primary-container);
+  --color-secondary: var(--theme-secondary);
+  --color-surface-bright: var(--theme-surface-bright);
+  --color-on-surface: var(--theme-on-surface);
+  --color-on-surface-variant: var(--theme-on-surface-variant);
+  --color-on-primary: var(--theme-on-primary);
+  --color-on-primary-container: var(--theme-on-primary-container);
+  --color-outline-variant: var(--theme-outline-variant);
+  --color-surface-tint: var(--theme-surface-tint);
+  --color-error: var(--theme-error);
+
+  --font-display: var(--theme-font-display);
+  --font-heading: var(--theme-font-heading);
+  --font-body: var(--theme-font-body);
+  --font-label: var(--theme-font-label);
+
+  --radius-button: var(--theme-radius-button);
+  --radius-card: var(--theme-radius-card);
+  --radius-input: var(--theme-radius-input);
+  
+  --background-image-hero: var(--theme-hero-gradient);
+}
+
+/* Global Styles */
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   font-family: var(--font-body);
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  /* Smooth transitions for theme switching */
+  transition: background-color 0.4s cubic-bezier(0.8, 0, 0.2, 1), 
+              color 0.4s cubic-bezier(0.8, 0, 0.2, 1);
 }
 
+/* High-Energy global overrides dependent on theme */
+[data-theme="energy"] body {
+  /* Use the snappy, aggressive motion defined in DESIGN_ENERGY */
+  transition: background-color 0.1s linear, color 0.1s linear;
+}
+
+/* Global Type Hierarchy Defaults */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+}
+
+.display-text {
+  font-family: var(--font-display);
+}
+
+/* 
+  Button utility class example 
+  Note: for energy mode we'll likely add specific box-shadows via utility classes or components
+*/
+.btn-primary {
+  @apply bg-primary text-on-primary rounded-button px-6 py-3 font-label uppercase font-bold;
+  transition: all 0.3s ease;
+}
+
+[data-theme="energy"] .btn-primary:hover {
+  box-shadow: 0px 0px 20px #00FF88;
+}
+
+[data-theme="calm"] .btn-primary {
+  box-shadow: inset 0px 1px 0px rgba(255,255,255,0.2);
 }
