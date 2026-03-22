@@ -1,16 +1,8 @@
-import { useState, useEffect } from "react"
+import { useTheme } from "@/hooks/useTheme"
 
 export default function App() {
-  // 1. By default, start with 'calm' mode as requested.
-  const [theme, setTheme] = useState<"calm" | "energy">("calm")
+  const { theme, setTheme } = useTheme()
 
-  // 2. React to theme changes by updating the data-theme attribute on the root HTML element.
-  // This triggers all the CSS variables we defined in index.css to swap instantly!
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme)
-  }, [theme])
-
-  // 3. dynamically select the image based on the active theme
   const heroImage =
     theme === "energy"
       ? "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" // Tech/Neon Vibe
