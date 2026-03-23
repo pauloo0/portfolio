@@ -1,7 +1,8 @@
+import ModeToggle from "@/components/ModeToggle"
 import { useTheme } from "@/hooks/useTheme"
 
 export default function App() {
-  const { theme, setTheme } = useTheme()
+  const { theme } = useTheme()
 
   const heroImage =
     theme === "energy"
@@ -16,12 +17,7 @@ export default function App() {
         <h1 className="font-heading text-2xl font-bold tracking-tighter">
           PORTFOLIO<span className="text-primary">.</span>
         </h1>
-        <button
-          onClick={() => setTheme(theme === "calm" ? "energy" : "calm")}
-          className="px-6 py-2 rounded-button bg-surface-container-high hover:bg-surface-bright text-primary border border-outline-variant transition-all font-label uppercase text-sm tracking-widest cursor-pointer"
-        >
-          {theme === "calm" ? "Activate Energy" : "Return to Calm"}
-        </button>
+        <ModeToggle />
       </nav>
 
       {/* Hero Section */}
